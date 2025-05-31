@@ -11,6 +11,21 @@ const ffmpegPath = require('ffmpeg-static');
 ffmpeg.setFfmpegPath(ffmpegPath);
 console.log('DEBUG: FFmpeg path set to:', ffmpegPath);
 
+// تست اجرای FFmpeg برای دیباگ
+ffmpeg()
+  .input('test.mp4')
+  .output('test-output.mp4')
+  .on('start', (commandLine) => {
+    console.log('DEBUG: FFmpeg test command started:', commandLine);
+  })
+  .on('error', (err) => {
+    console.error('DEBUG: FFmpeg test error:', err.message);
+  })
+  .on('end', () => {
+    console.log('DEBUG: FFmpeg test completed');
+  })
+  .run();
+
 async function ensureDir(userId) {
   const dir = path.join(downPath, userId.toString());
   await fs.mkdir(dir, { recursive: true });
@@ -19,16 +34,26 @@ async function ensureDir(userId) {
 
 async function downloadFile(ctx, fileId, filePath) {
   try {
+    console.log(`DEBUG: Starting download for fileId: ${fileId}, saving to: ${filePath}`);
     const file = await ctx.telegram.getFile(fileId);
+    console.log(`DEBUG: File info from Telegram: ${JSON.stringify(file)}`);
     const url = `https://api.telegram.org/file/bot${botToken}/${file.file_path}`;
+    console.log(`DEBUG: Download URL: ${url}`);
     const response = await axios.get(url, { responseType: 'stream' });
+    console.log(`DEBUG: Download response status: ${response.status}`);
     const writer = response.data.pipe(require('fs').createWriteStream(filePath));
     await new Promise((resolve, reject) => {
-      writer.on('finish', resolve);
-      writer.on('error', reject);
+      writer.on('finish', () => {
+        console.log('DEBUG: File download completed successfully');
+        resolve();
+      });
+      writer.on('error', (error) => {
+        console.error('DEBUG: File download failed:', error.message);
+        reject(error);
+      });
     });
   } catch (error) {
-    console.error('Download file error:', error);
+    console.error('Download file error:', error.message);
     throw error;
   }
 }
