@@ -6,8 +6,10 @@ const sharp = require('sharp');
 const FormData = require('form-data');
 const { botToken, downPath, streamtapeUsername, streamtapePass, timeGap } = require('./config');
 
-// تنظیم مسیر FFmpeg برای Render
-ffmpeg.setFfmpegPath('/usr/bin/ffmpeg');
+// تنظیم مسیر FFmpeg با ffmpeg-static
+const ffmpegPath = require('ffmpeg-static');
+ffmpeg.setFfmpegPath(ffmpegPath);
+console.log('DEBUG: FFmpeg path set to:', ffmpegPath);
 
 async function ensureDir(userId) {
   const dir = path.join(downPath, userId.toString());
