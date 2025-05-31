@@ -2,6 +2,7 @@ const express = require('express');
 const { bot } = require('./bot');
 const { connectMongoDB } = require('./db');
 const { botOwner, port } = require('./config');
+const path = require('path'); // اضافه کردن ماژول path
 
 const app = express();
 app.use(express.json());
