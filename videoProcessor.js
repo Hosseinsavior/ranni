@@ -1,7 +1,7 @@
 const axios = require('axios');
 const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs').promises;
-const path = require('path');
+const path = require('path'); // اضافه کردن ماژول path
 const sharp = require('sharp');
 const FormData = require('form-data');
 const { botToken, downPath, streamtapeUsername, streamtapePass, timeGap } = require('./config');
