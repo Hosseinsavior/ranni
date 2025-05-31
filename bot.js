@@ -4,6 +4,7 @@ const si = require('systeminformation');
 const { botToken, botOwner, updatesChannel, timeGap, maxVideos, broadcastAsCopy } = require('./config');
 const { addUserToDatabase, getUploadAsDoc, setUploadAsDoc, getGenerateSampleVideo, setGenerateSampleVideo, getGenerateSs, setGenerateSs, setThumbnail, getThumbnail, deleteUser, getAllUsers, totalUsersCount } = require('./db');
 const { ensureDir, downloadFile, deleteAll, mergeVideo, cutSmallVideo, generateScreenshots, generateThumbnail, getVideoMetadata, uploadToStreamtape, uploadVideo } = require('./videoProcessor');
+const path = require('path'); // اضافه کردن ماژول path
 
 const bot = new Telegraf(botToken);
 
